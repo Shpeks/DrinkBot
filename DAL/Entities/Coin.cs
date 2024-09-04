@@ -5,6 +5,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Core.Enum;
 
 namespace DAL.Entities
 {
@@ -21,13 +22,5 @@ namespace DAL.Entities
 
         [Required]
         public int Count { get; set; }
-    }
-
-    public enum CoinDenomination
-    {
-        One = 1,
-        Two = 2,
-        Five = 5,
-        Ten = 10
     }
 }

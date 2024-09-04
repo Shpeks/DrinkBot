@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Core.Enum;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -15,13 +16,7 @@ namespace Core.DTO
         /// </summary>
         public CoinDenomination Denomination { get; set; }
 
-        public int Quantity { get; set; }
+        public int Count { get; set; }
     }
-    public enum CoinDenomination
-    {
-        One = 1,
-        Two = 2,
-        Five = 5,
-        Ten = 10
-    }
+    
 }
