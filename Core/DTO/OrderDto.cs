@@ -12,11 +12,6 @@ namespace Core.DTO
 
         public DateTime OrderDate { get; set; }
 
-        /// <summary>
-        /// Общая сумма всех позиций в заказе(<see cref="OrderItem.TotalPrice"/>)
-        /// </summary>
-        public decimal TotalAmount { get; set; }
-
         public List<OrderItemDto> OrderItems { get; set; } 
     }
 }

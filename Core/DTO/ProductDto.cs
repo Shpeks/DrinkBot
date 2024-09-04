@@ -16,6 +16,8 @@ namespace Core.DTO
 
         public int BrandId { get; set; }
 
+        public string ImagePath { get; set; }
+        
         public string BrandName { get; set; } 
     }
 
