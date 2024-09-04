@@ -17,6 +17,9 @@ namespace DAL.Entities
         [MaxLength(100)]
         public string Name { get; set; }
 
+        [MaxLength(255)]
+        public string ImagePath { get; set; }
+
         [Required]
         [Column(TypeName = "decimal(18,2)")]
         public decimal Price { get; set; }
@@ -25,5 +28,7 @@ namespace DAL.Entities
         public int BrandId { get; set; }
 
         public Brand Brand { get; set; }
+
+        public ICollection<OrderItem> OrderItems { get; set; } = new List<OrderItem>();
     }
 }

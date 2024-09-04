@@ -19,6 +19,10 @@ namespace DAL.Entities
         [ForeignKey("Order")]
         public int OrderId { get; set; }
 
+        [ForeignKey("Product")]
+        [Required]
+        public int ProductId { get; set; }
+
         [Required]
         [MaxLength(100)]
         public string ProductName { get; set; }
@@ -26,6 +30,9 @@ namespace DAL.Entities
         [Required]
         [MaxLength(100)]
         public string BrandName { get; set; }
+
+        [MaxLength(255)]
+        public string ImagePath { get; set; }
 
         [Required]
         public int Count { get; set; }
@@ -40,6 +47,8 @@ namespace DAL.Entities
         [Required]
         [Column(TypeName = "decimal(18,2)")]
         public decimal TotalPrice { get; set; }
+
+        public Product Product { get; set; }
 
         public Order Order { get; set; }
     }
