@@ -34,6 +34,12 @@ namespace DAL.Data
             );
 
             modelBuilder.Entity<OrderItem>()
+                .HasOne(oi => oi.Product)
+                .WithMany(p => p.OrderItems) 
+                .HasForeignKey(oi => oi.ProductId) 
+                .OnDelete(DeleteBehavior.Restrict); // при удалении Product, связанные (OrderItem) НЕ будут удалены, и выбросится исключение.
+
+            modelBuilder.Entity<OrderItem>()
                 .HasOne(oi => oi.Order)
                 .WithMany(o => o.OrderItems)
                 .HasForeignKey(oi => oi.OrderId)
