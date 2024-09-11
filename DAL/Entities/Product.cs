@@ -18,11 +18,17 @@ namespace DAL.Entities
         public string Name { get; set; }
 
         [MaxLength(255)]
-        public string ImagePath { get; set; }
+        public string? ImagePath { get; set; }
 
         [Required]
         [Column(TypeName = "decimal(18,2)")]
         public decimal Price { get; set; }
+
+        /// <summary>
+        /// Имеется в автомате
+        /// </summary>
+        [Required]
+        public int Count { get; set; }
 
         [ForeignKey("Brand")]
         public int BrandId { get; set; }

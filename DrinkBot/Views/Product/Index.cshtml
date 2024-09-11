@@ -1,0 +1,160 @@
+﻿@model IEnumerable<ProductViewModel>
+
+
+<h1 class="mb-4">Газированные напитки</h1>
+<form asp-action="Index" asp-controller="Product" method="get" class="mb-3">
+    <div class="row mb-3">
+        <div class="col-md-4">
+            <label for="brandFilter" class="form-label">Выберите бренд:</label>
+            <select id="brandFilter" name="brand" class="form-select" onchange="this.form.submit()">
+                <option value="">Все бренды</option>
+                @foreach (var brand in ViewBag.Brands)
+                {
+                    if (brand == ViewBag.SelectedBrand)
+                    {
+                        <option value="@brand" selected="selected">@brand</option>
+                    }
+                    else
+                    {
+                        <option value="@brand">@brand</option>
+                    }
+                }
+            </select>
+        </div>
+    </div>
+</form>
+
+<div>
+    <label for="priceRange">Стоимость</label>
+    <div class="d-flex align-items-center">
+        <span id="minPriceLabel">0 руб.</span>
+        <input type="range" id="priceSlider" min="0" max="1000" value="500" class="form-range mx-2">
+        <span id="maxPriceLabel">1000 руб.</span>
+    </div>
+</div>
+
+<form asp-action="ImportExcel" asp-controller="Product" enctype="multipart/form-data" method="post">
+    <input type="file" name="file" />
+    <button type="submit" class="btn btn-primary">Импортировать из Excel</button>
+</form>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Название
+            </th>
+            <th>
+                Количество
+            </th>
+            <th>
+                Цена
+            </th>
+            <th>
+                Фото
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody id="product-list">
+        @foreach(var item in Model)
+        {
+            <tr>
+                <td>
+                    @item.Name
+                </td>
+                <td>
+                    @item.Count
+                </td>
+                <td>
+                    @item.Price
+                </td>
+                <td class="w-25">
+                    <img src="@Url.Content($"{item.ImagePath}")" class="card-img-top h-25" alt="@item.Name">
+                </td>
+                <td>
+                    <button class="btn @(item.Count <= 0 ? "btn-danger" : "btn-primary")" data-id="@item.Id">
+                        @(item.Count <= 0 ? "Закончилось" : "Выбрать")
+                    </button>
+                </td>
+                
+            </tr>                     
+        }
+    </tbody>
+</table>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(function () {
+        $(document).ready(function () {
+            // Обработчик клика по кнопке
+            $(document).on('click', '.btn-primary', function () {
+                var button = $(this);
+                var currentText = button.text().trim();
+
+                if (currentText === 'Выбрать') {
+                    button.text('Выбрано'); 
+                    button.removeClass('btn-primary').addClass('btn-secondary'); 
+                } else if (currentText === 'Выбрано') {
+                    button.text('Выбрать');
+                    button.removeClass('btn-secondary').addClass('btn-primary');
+                }
+            });
+        });
+
+        const minPrice = 0;
+        const maxPrice = 1000;
+        let selectedBrand = $('#brandFilter').val(); // Получить выбранный бренд
+
+        // Обработчик изменения бренда
+        $('#brandFilter').on('change', function () {
+            selectedBrand = $(this).val(); // Обновить выбранный бренд
+            fetchProducts(minPrice, $('#priceSlider').val(), selectedBrand); // Обновить продукты
+        });
+
+        // Обработчик изменения цены
+        $('#priceSlider').on('input', function () {
+            let value = $(this).val();
+            $('#maxPriceLabel').text(`${value} руб.`);
+            fetchProducts(minPrice, value, selectedBrand); // Обновить продукты с учетом бренда
+        });
+
+        function fetchProducts(minPrice, maxPrice, brand) {
+            $.ajax({
+                url: `/GetProductsByPriceRange?minPrice=${minPrice}&maxPrice=${maxPrice}&brand=${brand}`, // Передача бренда и диапазона цен
+                type: "GET",
+                success: function (data) {
+                    displayProducts(data);
+                }
+            });
+        }
+
+        function displayProducts(products) {
+            const productList = $("#product-list");
+            productList.empty(); // Очистить таблицу
+
+            products.forEach(product => {
+                const buttonClass = product.isAvailable ? 'btn-primary' : 'btn-danger';
+                const buttonText = product.isAvailable ? 'Выбрать' : 'Закончилось';
+
+                const productItem = `<tr>
+                            <td>${product.name}</td>
+                            <td>${product.count}</td>
+                            <td>${product.price} руб.</td>
+                            <td class="w-25">
+                                    <img src="${product.imagePath}" alt="${product.name}" class="card-img-top h-25"/>
+                            </td>
+                            <td>
+                                        <button class="btn ${product.count <= 0 ? 'btn-danger' : 'btn-primary'}" data-id="${product.id}">
+                                            ${product.count <= 0 ? 'Закончилось' : 'Выбрать'}
+                                        </button>
+                            </td>
+                        </tr>`;
+                productList.append(productItem); // Добавить продукт в таблицу
+            });
+        }
+        // Загрузить все продукты при первой загрузке
+        fetchProducts(minPrice, maxPrice, selectedBrand);
+        
+    });
+</script>

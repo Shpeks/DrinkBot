@@ -34,6 +34,9 @@ namespace DAL.Entities
         [MaxLength(255)]
         public string ImagePath { get; set; }
 
+        /// <summary>
+        /// Выбранное количество
+        /// </summary>
         [Required]
         public int Count { get; set; }
 

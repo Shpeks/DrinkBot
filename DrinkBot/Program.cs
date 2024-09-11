@@ -1,4 +1,8 @@
+using API.Interfaces.Services;
+using API.Repository;
+using API.Services;
 using DAL.Data;
+using DAL.Repository;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 
@@ -6,7 +10,11 @@ var builder = WebApplication.CreateBuilder(args);
 var services = builder.Services;
 var configuration = builder.Configuration;
 
-builder.Services.AddControllersWithViews();
+services.AddScoped<IProductRepository, ProductRepository>();
+services.AddScoped<IBrandRepository, BrandRepository>();
+services.AddScoped<IProductService, ProductService>();
+
+services.AddControllersWithViews();
 
 services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(configuration.GetConnectionString("DefaultConnection")));
@@ -28,6 +36,6 @@ app.UseAuthorization();
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}");
+    pattern: "{controller=Product}/{action=Index}/{id?}");
 
 app.Run();
