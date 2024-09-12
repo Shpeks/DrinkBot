@@ -1,4 +1,5 @@
 ﻿using API.Repository;
+using Core.DTO;
 using DrinkBot.Extensions;
 using DrinkBot.Models;
 using Microsoft.AspNetCore.Mvc;
@@ -22,29 +23,68 @@ namespace DrinkBot.Controllers
         }
 
         [HttpGet]
-        public IActionResult Index(List<int> selectedProduct, int totalSum)
+        public IActionResult Index(int totalSum, string productData)
         {
+            var productDictionary = Newtonsoft.Json.JsonConvert.DeserializeObject<Dictionary<int, int>>(productData);
+
+            var productIds = productDictionary.Keys.ToList();
+            var counts = productDictionary.Values.ToList();
+
             var cointDto = _coinRepository.GetAllCoins();
 
             var coinViewModel = cointDto
                 .Select(dto => dto.GetCoinViewModel())
                 .ToList();
-            //var products = new List<ProductViewModel>();
 
-            //foreach (var itemId in selectedProduct)
+
+            ViewBag.TotalSum = totalSum;
+            ViewBag.ProductIds = productIds;
+            ViewBag.Counts = counts;
+
+            return View(coinViewModel);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> CreateOrder(List<int> productIds, int totalSum)
+        {
+
+            var orderDto = new OrderDto
+            {
+                TotalPrice = totalSum,
+                OrderDate = DateTime.Now,
+                OrderItems = new List<OrderItemDto>()
+            };
+
+            await _orderRepository.CreateOrderAsync(orderDto);
+
+            int orderId = orderDto.Id;
+
+            //foreach (var productEntry in productDictionary)
             //{
-            //    var productById = _productRepository.GetProductById(itemId);
-            //    var brandById = _brandRepository.GetBrandById(productById.BrandId);
+            //    int productid = productEntry.Key;
+            //    int count = productEntry.Value;
 
-            //    if (productById != null)
+            //    var product = _productRepository.GetProductById(productid);
+            //    var brand = _brandRepository.GetBrandById(product.BrandId);
+
+            //    if (product != null)
             //    {
-            //        var productViewModel = productById.GetProductViewModel();
-            //        productViewModel.BrandName = brandById.Name;
-            //        products.Add(productViewModel);
+            //        var orderItemDto = new OrderItemDto
+            //        {
+            //            OrderId = orderId,
+            //            ProductName = product.Name,
+            //            BrandName = brand.Name,
+            //            ProductId = productid,
+            //            ImagePath = product.ImagePath,
+            //            Count = count,
+            //            Price = product.Price,
+            //        };
+
+            //        await _orderItemRepository.CreateOrderItemAsync(orderItemDto);
             //    }
             //}
 
-            return View(coinViewModel);
+            return View();
         }
     }
 }

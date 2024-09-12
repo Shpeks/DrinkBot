@@ -1,5 +1,4 @@
-﻿using Core.Enum;
-using DAL.Entities;
+﻿using DAL.Entities;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -27,10 +26,10 @@ namespace DAL.Data
             base.OnModelCreating(modelBuilder);
 
             modelBuilder.Entity<Coin>().HasData(
-                new Coin { Id = 1, Denomination = CoinDenomination.One, Count = 0, ImagePath = "/images/rub1.png" },
-                new Coin { Id = 2, Denomination = CoinDenomination.Two, Count = 0, ImagePath = "/images/rub2.png" },
-                new Coin { Id = 3, Denomination = CoinDenomination.Five, Count = 0, ImagePath = "/images/rub5.png" },
-                new Coin { Id = 4, Denomination = CoinDenomination.Ten, Count = 0, ImagePath = "/images/rub10.png" }
+                new Coin { Id = 1, Denomination = 1, Count = 0, ImagePath = "/images/1rub.png", Name = "1 рубль" },
+                new Coin { Id = 2, Denomination = 2, Count = 0, ImagePath = "/images/2rub.png", Name = "2 рубля" },
+                new Coin { Id = 3, Denomination = 5, Count = 0, ImagePath = "/images/5rub.png", Name = "5 рублей" },
+                new Coin { Id = 4, Denomination = 10, Count = 0, ImagePath = "/images/10rub.png", Name = "10 рублей" }
             );
 
             modelBuilder.Entity<Brand>().HasData(

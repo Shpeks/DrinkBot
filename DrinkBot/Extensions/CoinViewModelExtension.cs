@@ -11,8 +11,9 @@ namespace DrinkBot.Extensions
             {
                 Id = modelDto.Id,
                 Count = modelDto.Count,
-                Denomination = modelDto.Denomination.ToString(),
+                Denomination = modelDto.Denomination,
                 ImagePath = modelDto.ImagePath,
+                Name = modelDto.Name,
             };
 
             return coin;

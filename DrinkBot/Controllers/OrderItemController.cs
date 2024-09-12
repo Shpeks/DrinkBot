@@ -42,16 +42,26 @@ namespace DrinkBot.Controllers
         }
 
         [HttpPost]
-        public IActionResult ProceedToPayment(List<int> SelectedProduct, int TotalSum)
+        public IActionResult ProceedToPayment(OrderPaymentView orderPayment)
         {
-            // Проверка на наличие выбранных товаров
-            if (SelectedProduct == null || !SelectedProduct.Any())
-            {
-                return RedirectToAction("Index");
-            }
+            //Dictionary<int, int> productCounts = new Dictionary<int, int>();
+            //for (int i = 0; i < SelectedProduct.Count; i++)
+            //{
+            //    int productId = SelectedProduct[i];
+            //    int count = TotalCount[i];
 
+            //    productCounts[productId] = count;
+            //}
+
+            //// Проверка на наличие выбранных товаров
+            //if (SelectedProduct == null || !SelectedProduct.Any())
+            //{
+            //    return RedirectToAction("Index");
+            //}
+
+            //string serializedDictionary = Newtonsoft.Json.JsonConvert.SerializeObject(productCounts);
             // Перенаправляем на действие Payment контроллера Payment
-            return RedirectToAction("Index", "Payment", new { selectedProduct = SelectedProduct, totalSum = TotalSum });
+            return View(orderPayment);
         }
     }
 }

@@ -27,6 +27,7 @@ namespace DAL.Repository
             {
                 Id = b.Id,
                 Count = b.Count,
+                Name = b.Name,
                 ImagePath = b.ImagePath,
                 Denomination = b.Denomination,
             }).ToList();
@@ -40,9 +41,10 @@ namespace DAL.Repository
             return new CoinDto
             {
                 Id = coinEntity.Id,
+                Name = coinEntity.Name,
                 Count = coinEntity.Count,
                 ImagePath = coinEntity.ImagePath,
-                Denomination = coinEntity.Denomination
+                Denomination = coinEntity.Denomination,
             };
         }
         public void UpdateCoinAsync(CoinDto coinDto)
@@ -51,8 +53,10 @@ namespace DAL.Repository
             if (coinEntity == null) return;
 
             coinEntity.Count = coinDto.Count;
+            coinEntity.Name = coinDto.Name;
             coinEntity.ImagePath = coinDto.ImagePath;
             coinEntity.Denomination = coinDto.Denomination;
+
             _context.SaveChanges();
         }
 
@@ -61,8 +65,9 @@ namespace DAL.Repository
             var coinEntity = new Coin
             {
                 Count = coinDto.Count,
+                Name = coinDto.Name,
                 ImagePath = coinDto.ImagePath,
-                Denomination = coinDto.Denomination
+                Denomination = coinDto.Denomination,
             };
 
             await _context.Coins.AddAsync(coinEntity);

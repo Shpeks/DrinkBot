@@ -5,7 +5,6 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Core.Enum;
 
 namespace DAL.Entities
 {
@@ -14,11 +13,13 @@ namespace DAL.Entities
         [Key]
         public int Id { get; set; }
 
+        public string Name { get; set; }
+
         /// <summary>
         /// Номинал
         /// </summary>
         [Required]
-        public CoinDenomination Denomination { get; set; }
+        public int Denomination { get; set; }
 
         public string ImagePath {  get; set; }
 

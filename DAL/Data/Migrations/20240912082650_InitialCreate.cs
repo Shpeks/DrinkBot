@@ -32,6 +32,7 @@ namespace DAL.Data.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Denomination = table.Column<int>(type: "int", nullable: false),
                     ImagePath = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Count = table.Column<int>(type: "int", nullable: false)
@@ -120,13 +121,13 @@ namespace DAL.Data.Migrations
 
             migrationBuilder.InsertData(
                 table: "Coins",
-                columns: new[] { "Id", "Count", "Denomination", "ImagePath" },
+                columns: new[] { "Id", "Count", "Denomination", "ImagePath", "Name" },
                 values: new object[,]
                 {
-                    { 1, 0, 1, "/images/rub1.png" },
-                    { 2, 0, 2, "/images/rub2.png" },
-                    { 3, 0, 5, "/images/rub5.png" },
-                    { 4, 0, 10, "/images/rub10.png" }
+                    { 1, 0, 1, "/images/1rub.png", "1 рубль" },
+                    { 2, 0, 2, "/images/2rub.png", "2 рубля" },
+                    { 3, 0, 5, "/images/5rub.png", "5 рублей" },
+                    { 4, 0, 10, "/images/10rub.png", "10 рублей" }
                 });
 
             migrationBuilder.CreateIndex(

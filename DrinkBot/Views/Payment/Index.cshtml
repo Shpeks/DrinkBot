@@ -1,6 +1,6 @@
 ﻿@model IEnumerable<CoinViewModel>
 
-<form asp-action="Index">
+<form asp-action="CreateOrder" asp-controller="Payment" method="post">
     <table class="table">
         <thead>
             <tr>
@@ -13,17 +13,123 @@
                 <th>
                     Сумма
                 </th>
+                <th></th>
             </tr>
         </thead>
         <tbody>
             @foreach (var item in Model)
             {
                 <tr>
+                    <td style="width:5%; height:5%;">
+                        <img src="@Url.Content($"{item.ImagePath}")" class="card-img-top" alt="@item.Name"/> @item.Name
+                    </td>
                     <td>
-                        <img src="@Url.Content($"{item.ImagePath}")" class="card-img-top h-25 w-25" alt="@item.Denomination"/>
+                        <div class="d-flex align-items-center">
+                            <!-- Кнопка уменьшения количества -->
+                            <button type="button" class="btn btn-outline-secondary btn-decrease" data-id="@item.Id">-</button>
+
+                            <!-- Поле для количества -->
+                            <input type="number" id="count-@item.Id" data-denomination="@item.Denomination" class="form-control mx-2 text-center count-input" value="0" min="0" style="width: 60px;" />
+
+                            <!-- Кнопка увеличения количества -->
+                            <button type="button" class="btn btn-outline-secondary btn-increase" data-id="@item.Id">+</button>
+                        </div>
+                    </td>
+                    <td>
+                        <span id="total-price-@item.Id">@item.Denomination руб.</span>
+                    </td>
+                    <td>
+
                     </td>
                 </tr>
             }
         </tbody>
     </table>
+
+    <input type="number" value="@ViewBag.TotalSum" name="totalSum"/> 
+    <input type="hidden" value="@ViewBag.ProductIds" name="productIds" />
+
+    <p>Итоговая сумма: <span id="total-Sum">0</span> руб.</p>
+    <p>Вы внесли: <span id="final-sum">0</span> руб.</p>
+
+    <button type="submit" id="payButton" class="btn btn-primary" disabled>Оплатить</button>
 </form>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function () {
+
+        // Итоговая сумма
+        var totalSum = @ViewBag.TotalSum;
+        $('#total-Sum').text(totalSum.toFixed(0));
+
+        // Функция обновления цены для каждого номинала
+        function updatePrice(itemId) {
+            var countInput = $('#count-' + itemId);
+            var count = parseInt(countInput.val());
+            var denomination = parseInt(countInput.data('denomination')); 
+            var totalPrice = (count * denomination).toFixed(0); 
+
+            $('#total-price-' + itemId).text(totalPrice + ' руб.');
+
+            updateFinalSum();
+        }
+
+        // Функция пересчета внесенной суммы
+        function updateFinalSum() {
+            let finalSum = 0;
+            $('.count-input').each(function () {
+                let count = parseInt($(this).val());
+                let denomination = parseInt($(this).data('denomination'));
+                finalSum += count * denomination;
+            });
+
+            $('#final-sum').text(finalSum.toFixed(0)); // Обновляем отображаемую внесенную сумму
+
+            // Активируем/деактивируем кнопку в зависимости от условия
+            if (finalSum >= totalSum) {
+                $('#payButton').prop('disabled', false); // Активируем кнопку, если условие выполняется
+            } else {
+                $('#payButton').prop('disabled', true);  // Деактивируем кнопку, если условие не выполняется
+            }
+        }
+
+        // Обработчик для кнопки увеличения количества
+        $('.btn-increase').on('click', function () {
+            var itemId = $(this).data('id');
+            var countInput = $('#count-' + itemId);
+            var currentValue = parseInt(countInput.val());
+
+            countInput.val(currentValue + 1);
+
+            updatePrice(itemId);
+        });
+
+        // Обработчик для кнопки уменьшения количества
+        $('.btn-decrease').on('click', function () {
+            var itemId = $(this).data('id');
+            var countInput = $('#count-' + itemId);
+            var currentValue = parseInt(countInput.val());
+
+            if (currentValue > 0) {
+                countInput.val(currentValue - 1);
+            }
+
+            updatePrice(itemId);
+        });
+
+        // Обработчик для ручного ввода в поле
+        $('.count-input').on('input', function () {
+            var itemId = $(this).attr('id').split('-')[1];
+            var inputValue = parseInt($(this).val());
+
+            if (isNaN(inputValue) || inputValue < 0) {
+                $(this).val(0); 
+            }
+
+            updatePrice(itemId);
+        });
+
+        updateFinalSum();
+    });
+</script>

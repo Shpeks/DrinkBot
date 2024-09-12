@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DAL.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240911193317_InitialCreate")]
+    [Migration("20240912082650_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -73,6 +73,10 @@ namespace DAL.Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.HasKey("Id");
 
                     b.ToTable("Coins");
@@ -83,28 +87,32 @@ namespace DAL.Data.Migrations
                             Id = 1,
                             Count = 0,
                             Denomination = 1,
-                            ImagePath = "/images/rub1.png"
+                            ImagePath = "/images/1rub.png",
+                            Name = "1 рубль"
                         },
                         new
                         {
                             Id = 2,
                             Count = 0,
                             Denomination = 2,
-                            ImagePath = "/images/rub2.png"
+                            ImagePath = "/images/2rub.png",
+                            Name = "2 рубля"
                         },
                         new
                         {
                             Id = 3,
                             Count = 0,
                             Denomination = 5,
-                            ImagePath = "/images/rub5.png"
+                            ImagePath = "/images/5rub.png",
+                            Name = "5 рублей"
                         },
                         new
                         {
                             Id = 4,
                             Count = 0,
                             Denomination = 10,
-                            ImagePath = "/images/rub10.png"
+                            ImagePath = "/images/10rub.png",
+                            Name = "10 рублей"
                         });
                 });
 

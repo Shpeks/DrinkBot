@@ -29,7 +29,7 @@
                             <button type="button" class="btn btn-outline-secondary btn-decrease" data-id="@item.Id">-</button>
 
                             <!-- Поле для количества -->
-                            <input type="number" id="count-@item.Id" data-max-count="@item.Count" class="form-control mx-2 text-center count-input" value="1" min="1" data-price="@item.Price" style="width: 60px;" />
+                            <input type="number" name="Products[@item.Id]" id="Products[@item.Id]" data-max-count="@item.Count" class="form-control mx-2 text-center count-input" value="1" min="1" data-price="@item.Price" style="width: 60px;" />
 
                             <!-- Кнопка увеличения количества -->
                             <button type="button" class="btn btn-outline-secondary btn-increase" data-id="@item.Id">+</button>
@@ -38,17 +38,13 @@
                     <td>
                         <span id="total-price-@item.Id">@item.Price</span> руб.
                     </td>
-                    <td>
-                        <input type="hidden" name="SelectedProduct" value="@item.Id"/>
+                    <td>                      
                         <button type="button" class="btn btn-danger btn-remove" data-id="@item.Id">Удалить</button>
                     </td>
                 </tr>
             }
         </tbody>
     </table>
-
-    <!-- Скрытое поле для передачи общей суммы -->
-    <input type="hidden" id="totalSum" name="TotalSum" />
 
     <label>Итоговая сумма: <span id="final-sum">0</span> руб.</label>
 
@@ -61,7 +57,7 @@
 </form>
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script>
+@* <script>
     $(document).ready(function () {
         // Функция для пересчета общей суммы
         function updateFinalSum() {
@@ -90,6 +86,9 @@
 
             // Обновляем отображаемую цену
             $('#total-price-' + itemId).text(totalPrice);
+
+            // Обновляем скрытое поле для количества
+            $('#hidden-count-' + itemId).val(count);
 
             // Обновляем итоговую сумму
             updateFinalSum();
@@ -155,4 +154,4 @@
         // Инициализация: пересчитываем итоговую сумму при загрузке страницы
         updateFinalSum();
     });
-</script>
+</script> *@
