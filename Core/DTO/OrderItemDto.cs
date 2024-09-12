@@ -25,11 +25,7 @@ namespace Core.DTO
 
         public int Count { get; set; }
 
-        public decimal Price { get; set; }
+        public int Price { get; set; }
 
-        /// <summary>
-        /// Count * Price
-        /// </summary>
-        public decimal TotalPrice { get; set; }
     }
 }

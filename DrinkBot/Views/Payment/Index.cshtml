@@ -1,0 +1,29 @@
+﻿@model IEnumerable<CoinViewModel>
+
+<form asp-action="Index">
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    Номинал
+                </th>
+                <th>
+                    Количество
+                </th>
+                <th>
+                    Сумма
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        <img src="@Url.Content($"{item.ImagePath}")" class="card-img-top h-25 w-25" alt="@item.Denomination"/>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</form>

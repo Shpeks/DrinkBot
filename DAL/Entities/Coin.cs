@@ -20,6 +20,8 @@ namespace DAL.Entities
         [Required]
         public CoinDenomination Denomination { get; set; }
 
+        public string ImagePath {  get; set; }
+
         [Required]
         public int Count { get; set; }
     }

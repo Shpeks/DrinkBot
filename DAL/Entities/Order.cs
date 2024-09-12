@@ -13,8 +13,10 @@ namespace DAL.Entities
         [Key]
         public int Id { get; set; }
 
+        public int TotalPrice { get; set; } = 0;
+
         [Required]
-        public DateTime OrderDate { get; set; }
+        public DateTime OrderDate { get; set; } = DateTime.Now;
 
         public ICollection<OrderItem> OrderItems { get; set; } = new List<OrderItem>();
     }

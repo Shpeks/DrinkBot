@@ -26,13 +26,17 @@ namespace DAL.Data
         {
             base.OnModelCreating(modelBuilder);
 
-            // Настройка начального заполнения данных
             modelBuilder.Entity<Coin>().HasData(
-                new Coin { Id = 1, Denomination = CoinDenomination.One, Count = 0 },
-                new Coin { Id = 2, Denomination = CoinDenomination.Two, Count = 0 },
-                new Coin { Id = 3, Denomination = CoinDenomination.Five, Count = 0 },
-                new Coin { Id = 4, Denomination = CoinDenomination.Ten, Count = 0 }
+                new Coin { Id = 1, Denomination = CoinDenomination.One, Count = 0, ImagePath = "/images/rub1.png" },
+                new Coin { Id = 2, Denomination = CoinDenomination.Two, Count = 0, ImagePath = "/images/rub2.png" },
+                new Coin { Id = 3, Denomination = CoinDenomination.Five, Count = 0, ImagePath = "/images/rub5.png" },
+                new Coin { Id = 4, Denomination = CoinDenomination.Ten, Count = 0, ImagePath = "/images/rub10.png" }
             );
+
+            modelBuilder.Entity<Brand>().HasData(
+                new Brand { Id = 1, Name = "brand1" },
+                new Brand { Id = 2, Name = "brand2" }
+                );
 
             modelBuilder.Entity<OrderItem>()
                 .HasOne(oi => oi.Product)

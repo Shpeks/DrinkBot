@@ -38,70 +38,35 @@
     <button type="submit" class="btn btn-primary">Импортировать из Excel</button>
 </form>
 
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                Название
-            </th>
-            <th>
-                Количество
-            </th>
-            <th>
-                Цена
-            </th>
-            <th>
-                Фото
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody id="product-list">
-        @foreach(var item in Model)
-        {
+<form asp-action="SaveSelectedProducts" method="post">
+    <table class="table">
+        <thead>
             <tr>
-                <td>
-                    @item.Name
-                </td>
-                <td>
-                    @item.Count
-                </td>
-                <td>
-                    @item.Price
-                </td>
-                <td class="w-25">
-                    <img src="@Url.Content($"{item.ImagePath}")" class="card-img-top h-25" alt="@item.Name">
-                </td>
-                <td>
-                    <button class="btn @(item.Count <= 0 ? "btn-danger" : "btn-primary")" data-id="@item.Id">
-                        @(item.Count <= 0 ? "Закончилось" : "Выбрать")
-                    </button>
-                </td>
-                
-            </tr>                     
-        }
-    </tbody>
-</table>
+                <th>
+                    Название
+                </th>
+                <th>
+                    Количество
+                </th>
+                <th>
+                    Цена
+                </th>
+                <th>
+                    Фото
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody id="product-list">
+            
+        </tbody>
+    </table>
+    <button type="submit" class="btn btn-primary">Сохранить выбранные продукты</button>
+</form>
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
     $(function () {
-        $(document).ready(function () {
-            // Обработчик клика по кнопке
-            $(document).on('click', '.btn-primary', function () {
-                var button = $(this);
-                var currentText = button.text().trim();
-
-                if (currentText === 'Выбрать') {
-                    button.text('Выбрано'); 
-                    button.removeClass('btn-primary').addClass('btn-secondary'); 
-                } else if (currentText === 'Выбрано') {
-                    button.text('Выбрать');
-                    button.removeClass('btn-secondary').addClass('btn-primary');
-                }
-            });
-        });
-
         const minPrice = 0;
         const maxPrice = 1000;
         let selectedBrand = $('#brandFilter').val(); // Получить выбранный бренд
@@ -134,25 +99,22 @@
             productList.empty(); // Очистить таблицу
 
             products.forEach(product => {
-                const buttonClass = product.isAvailable ? 'btn-primary' : 'btn-danger';
-                const buttonText = product.isAvailable ? 'Выбрать' : 'Закончилось';
-
+                const isChecked = product.isSelected ? "checked" : "";
                 const productItem = `<tr>
-                            <td>${product.name}</td>
-                            <td>${product.count}</td>
-                            <td>${product.price} руб.</td>
-                            <td class="w-25">
+                                <td>${product.name}</td>
+                                <td>${product.count}</td>
+                                <td>${product.price} руб.</td>
+                                <td class="w-25">
                                     <img src="${product.imagePath}" alt="${product.name}" class="card-img-top h-25"/>
-                            </td>
-                            <td>
-                                        <button class="btn ${product.count <= 0 ? 'btn-danger' : 'btn-primary'}" data-id="${product.id}">
-                                            ${product.count <= 0 ? 'Закончилось' : 'Выбрать'}
-                                        </button>
-                            </td>
-                        </tr>`;
+                                </td>
+                                <td>
+                                    <input type="checkbox" name="SelectedItems" value="${product.id}" ${isChecked} />
+                                </td>
+                            </tr>`;
                 productList.append(productItem); // Добавить продукт в таблицу
             });
         }
+
         // Загрузить все продукты при первой загрузке
         fetchProducts(minPrice, maxPrice, selectedBrand);
         

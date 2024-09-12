@@ -12,7 +12,12 @@ var configuration = builder.Configuration;
 
 services.AddScoped<IProductRepository, ProductRepository>();
 services.AddScoped<IBrandRepository, BrandRepository>();
+services.AddScoped<IOrderRepository, OrderRepository>();
+services.AddScoped<IOrderItemRepository, OrderItemRepository>();
+services.AddScoped<ICoinRepository, CoinRepository>();
+
 services.AddScoped<IProductService, ProductService>();
+
 
 services.AddControllersWithViews();
 

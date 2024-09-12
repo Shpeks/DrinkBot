@@ -39,7 +39,7 @@ namespace API.Services
                     for (int row = 2; row <= rowCount; row++) // Начиная со второй, первая названиеu
                     {
                         var productName = worksheet.Cells[row, 1].Text;
-                        var price = decimal.Parse(worksheet.Cells[row, 2].Text);
+                        var price = int.Parse(worksheet.Cells[row, 2].Text);
                         var brandId = int.Parse(worksheet.Cells[row, 3].Text);
                         var count = int.Parse(worksheet.Cells[row, 5].Text);
                         string imagePath = ""; // По умолчанию пустой путь

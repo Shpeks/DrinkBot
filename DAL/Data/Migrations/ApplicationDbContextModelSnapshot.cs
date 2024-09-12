@@ -38,6 +38,18 @@ namespace DAL.Data.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Brands");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Name = "brand1"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Name = "brand2"
+                        });
                 });
 
             modelBuilder.Entity("DAL.Entities.Coin", b =>
@@ -54,6 +66,10 @@ namespace DAL.Data.Migrations
                     b.Property<int>("Denomination")
                         .HasColumnType("int");
 
+                    b.Property<string>("ImagePath")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.HasKey("Id");
 
                     b.ToTable("Coins");
@@ -63,25 +79,29 @@ namespace DAL.Data.Migrations
                         {
                             Id = 1,
                             Count = 0,
-                            Denomination = 1
+                            Denomination = 1,
+                            ImagePath = "/images/rub1.png"
                         },
                         new
                         {
                             Id = 2,
                             Count = 0,
-                            Denomination = 2
+                            Denomination = 2,
+                            ImagePath = "/images/rub2.png"
                         },
                         new
                         {
                             Id = 3,
                             Count = 0,
-                            Denomination = 5
+                            Denomination = 5,
+                            ImagePath = "/images/rub5.png"
                         },
                         new
                         {
                             Id = 4,
                             Count = 0,
-                            Denomination = 10
+                            Denomination = 10,
+                            ImagePath = "/images/rub10.png"
                         });
                 });
 
@@ -95,6 +115,9 @@ namespace DAL.Data.Migrations
 
                     b.Property<DateTime>("OrderDate")
                         .HasColumnType("datetime2");
+
+                    b.Property<int>("TotalPrice")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -125,8 +148,8 @@ namespace DAL.Data.Migrations
                     b.Property<int>("OrderId")
                         .HasColumnType("int");
 
-                    b.Property<decimal>("Price")
-                        .HasColumnType("decimal(18,2)");
+                    b.Property<int>("Price")
+                        .HasColumnType("int");
 
                     b.Property<int>("ProductId")
                         .HasColumnType("int");
@@ -135,9 +158,6 @@ namespace DAL.Data.Migrations
                         .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
-
-                    b.Property<decimal>("TotalPrice")
-                        .HasColumnType("decimal(18,2)");
 
                     b.HasKey("Id");
 
@@ -171,8 +191,8 @@ namespace DAL.Data.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
-                    b.Property<decimal>("Price")
-                        .HasColumnType("decimal(18,2)");
+                    b.Property<int>("Price")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 

@@ -25,7 +25,7 @@ namespace DrinkBot.Controllers
         }
 
         [HttpGet]
-        public IActionResult Index(string brand)
+        public IActionResult Index(string brand, List<int> SelectedItems)
         {
             var productDto = _productRepository.GetAllProducts();
 
@@ -43,8 +43,13 @@ namespace DrinkBot.Controllers
 
             ViewBag.Brands = brands.Values;
             ViewBag.SelectedBrand = brand;
+
+            // Передаем выбранные товары в представление
+            ViewBag.SelectedItems = SelectedItems ?? new List<int>();
+
             return View(productViewModel);
         }
+
 
         [HttpPost("ImportExcel")]
         public async Task<IActionResult> ImportExcel(IFormFile file)
@@ -67,6 +72,19 @@ namespace DrinkBot.Controllers
             }
 
             return Ok(products.ToList());
+        }
+
+        [HttpPost]
+        public IActionResult SaveSelectedProducts(List<int> SelectedItems)
+        {
+            if (SelectedItems == null || !SelectedItems.Any())
+            {
+                // Если ничего не выбрано, вернуться на исходную страницу
+                return RedirectToAction("Index");
+            }
+
+            // Передача выбранных элементов через параметры
+            return RedirectToAction("Index", "OrderItem", new { selectedItems = SelectedItems });
         }
     }
 }

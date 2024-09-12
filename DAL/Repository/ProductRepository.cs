@@ -49,6 +49,7 @@ namespace DAL.Repository
                 Count = productEntity.Count
             };
         }
+
         public void UpdateProductAsync(ProductDto productDto)
         {
             var productEntity = _context.Products.FirstOrDefault(b => b.Id == productDto.Id);

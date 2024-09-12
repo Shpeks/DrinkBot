@@ -12,6 +12,8 @@ namespace Core.DTO
 
         public DateTime OrderDate { get; set; }
 
+        public int TotalPrice { get; set; }
+
         public List<OrderItemDto> OrderItems { get; set; } = new List<OrderItemDto>();
     }
 }

@@ -1,0 +1,158 @@
+﻿@model IEnumerable<ProductViewModel>
+
+<form asp-action="ProceedToPayment" asp-controller="OrderItem" method="post">
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    Товар
+                </th>
+                <th>
+                    Количество
+                </th>
+                <th>
+                    Цена
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody id="product-list">
+            @foreach (var item in Model)
+            {
+                <tr id="product-row-@item.Id">
+                    <td>
+                        <img src="@Url.Content($"{item.ImagePath}")" class="card-img-top h-25 w-25" alt="@item.Name"> @item.Name @item.BrandName
+                    </td>
+                    <td>
+                        <div class="d-flex align-items-center">
+                            <!-- Кнопка уменьшения количества -->
+                            <button type="button" class="btn btn-outline-secondary btn-decrease" data-id="@item.Id">-</button>
+
+                            <!-- Поле для количества -->
+                            <input type="number" id="count-@item.Id" data-max-count="@item.Count" class="form-control mx-2 text-center count-input" value="1" min="1" data-price="@item.Price" style="width: 60px;" />
+
+                            <!-- Кнопка увеличения количества -->
+                            <button type="button" class="btn btn-outline-secondary btn-increase" data-id="@item.Id">+</button>
+                        </div>
+                    </td>
+                    <td>
+                        <span id="total-price-@item.Id">@item.Price</span> руб.
+                    </td>
+                    <td>
+                        <input type="hidden" name="SelectedProduct" value="@item.Id"/>
+                        <button type="button" class="btn btn-danger btn-remove" data-id="@item.Id">Удалить</button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <!-- Скрытое поле для передачи общей суммы -->
+    <input type="hidden" id="totalSum" name="TotalSum" />
+
+    <label>Итоговая сумма: <span id="final-sum">0</span> руб.</label>
+
+    <div class="mt-3">
+        <button type="button" class="btn btn-secondary" onclick="history.back()">Вернуться</button>
+    </div>
+    <div class="mt-3">
+        <button type="submit" class="btn btn-secondary">Оплата</button>
+    </div>
+</form>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function () {
+        // Функция для пересчета общей суммы
+        function updateFinalSum() {
+            let finalSum = 0;
+            $('.count-input').each(function () {
+                let count = parseInt($(this).val());
+                let price = parseFloat($(this).data('price'));
+                finalSum += count * price;
+            });
+
+            let roundedSum = Math.round(finalSum);
+
+            // Обновляем отображаемую сумму
+            $('#final-sum').text(roundedSum);
+
+            // Записываем итоговую сумму в скрытое поле
+            $('#totalSum').val(roundedSum);
+        }
+
+        // Функция обновления цены
+        function updatePrice(itemId) {
+            var countInput = $('#count-' + itemId);
+            var count = parseInt(countInput.val());
+            var pricePerUnit = parseFloat(countInput.data('price'));
+            var totalPrice = (count * pricePerUnit).toFixed(2);
+
+            // Обновляем отображаемую цену
+            $('#total-price-' + itemId).text(totalPrice);
+
+            // Обновляем итоговую сумму
+            updateFinalSum();
+        }
+
+        // Обработчик для удаления товара
+        $('.btn-remove').on('click', function () {
+            var itemId = $(this).data('id');
+
+            // Удаляем строку товара
+            $('#product-row-' + itemId).remove();
+
+            // Пересчитываем итоговую сумму
+            updateFinalSum();
+        });
+
+        // Обработчик для кнопки увеличения количества
+        $('.btn-increase').on('click', function () {
+            var itemId = $(this).data('id');
+            var countInput = $('#count-' + itemId);
+            var currentValue = parseInt(countInput.val());
+            var maxCount = parseInt(countInput.data('max-count'));
+
+            // Увеличиваем значение на 1, если оно меньше или равно максимальному количеству
+            if (currentValue < maxCount) {
+                countInput.val(currentValue + 1);
+            }
+
+            // Обновляем цену и итоговую сумму
+            updatePrice(itemId);
+        });
+
+        // Обработчик для кнопки уменьшения количества
+        $('.btn-decrease').on('click', function () {
+            var itemId = $(this).data('id');
+            var countInput = $('#count-' + itemId);
+            var currentValue = parseInt(countInput.val());
+            if (currentValue > 1) { // Уменьшаем значение, если оно больше 1
+                countInput.val(currentValue - 1);
+            }
+
+            // Обновляем цену и итоговую сумму
+            updatePrice(itemId);
+        });
+
+        // Обработчик для ручного ввода в поле
+        $('.count-input').on('input', function () {
+            var itemId = $(this).attr('id').split('-')[1];
+            var inputValue = parseInt($(this).val());
+            var maxCount = parseInt($(this).data('max-count'));
+
+            // Проверка на минимальное и максимальное значение
+            if (isNaN(inputValue) || inputValue < 1) {
+                $(this).val(1); // Если значение невалидно или меньше 1, устанавливаем 1
+            } else if (inputValue > maxCount) {
+                $(this).val(maxCount); // Если значение больше максимума, устанавливаем максимум
+            }
+
+            // Обновляем цену и итоговую сумму
+            updatePrice(itemId);
+        });
+
+        // Инициализация: пересчитываем итоговую сумму при загрузке страницы
+        updateFinalSum();
+    });
+</script>

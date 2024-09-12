@@ -1,4 +1,5 @@
-﻿using Core.DTO;
+﻿using API.Repository;
+using Core.DTO;
 using DAL.Data;
 using DAL.Entities;
 using System;
@@ -9,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace DAL.Repository
 {
-    public class CoinRepository
+    public class CoinRepository : ICoinRepository
     {
         private readonly ApplicationDbContext _context;
         public CoinRepository(ApplicationDbContext context)
@@ -26,6 +27,7 @@ namespace DAL.Repository
             {
                 Id = b.Id,
                 Count = b.Count,
+                ImagePath = b.ImagePath,
                 Denomination = b.Denomination,
             }).ToList();
         }
@@ -39,6 +41,7 @@ namespace DAL.Repository
             {
                 Id = coinEntity.Id,
                 Count = coinEntity.Count,
+                ImagePath = coinEntity.ImagePath,
                 Denomination = coinEntity.Denomination
             };
         }
@@ -48,6 +51,7 @@ namespace DAL.Repository
             if (coinEntity == null) return;
 
             coinEntity.Count = coinDto.Count;
+            coinEntity.ImagePath = coinDto.ImagePath;
             coinEntity.Denomination = coinDto.Denomination;
             _context.SaveChanges();
         }
@@ -57,6 +61,7 @@ namespace DAL.Repository
             var coinEntity = new Coin
             {
                 Count = coinDto.Count,
+                ImagePath = coinDto.ImagePath,
                 Denomination = coinDto.Denomination
             };
 

@@ -11,7 +11,6 @@ namespace DrinkBot.Mapping
             {
                 Id = viewModel.Id,
                 Name = viewModel.Name,
-                BrandId = viewModel.BrandId,
                 ImagePath = viewModel.ImagePath,
                 Price = viewModel.Price,
                 Count = viewModel.Count,

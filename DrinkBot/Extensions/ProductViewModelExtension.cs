@@ -11,7 +11,6 @@ namespace DrinkBot.Extensions
             {
                 Id = modelDto.Id,
                 Name = modelDto.Name,
-                BrandId = modelDto.BrandId,
                 ImagePath = modelDto.ImagePath,
                 Price = modelDto.Price,
                 Count = modelDto.Count,

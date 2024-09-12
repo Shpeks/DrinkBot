@@ -35,21 +35,13 @@ namespace DAL.Entities
         public string ImagePath { get; set; }
 
         /// <summary>
-        /// Выбранное количество
+        /// Выбранное количество продуктов
         /// </summary>
         [Required]
         public int Count { get; set; }
 
         [Required]
-        [Column(TypeName = "decimal(18,2)")]
-        public decimal Price { get; set; }
-
-        /// <summary>
-        /// Count * Price
-        /// </summary>
-        [Required]
-        [Column(TypeName = "decimal(18,2)")]
-        public decimal TotalPrice { get; set; }
+        public int Price { get; set; }
 
         public Product Product { get; set; }
 

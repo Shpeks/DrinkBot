@@ -33,6 +33,7 @@ namespace DAL.Data.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Denomination = table.Column<int>(type: "int", nullable: false),
+                    ImagePath = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Count = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
@@ -46,6 +47,7 @@ namespace DAL.Data.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
+                    TotalPrice = table.Column<int>(type: "int", nullable: false),
                     OrderDate = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
@@ -61,7 +63,7 @@ namespace DAL.Data.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
                     ImagePath = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: true),
-                    Price = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    Price = table.Column<int>(type: "int", nullable: false),
                     Count = table.Column<int>(type: "int", nullable: false),
                     BrandId = table.Column<int>(type: "int", nullable: false)
                 },
@@ -88,8 +90,7 @@ namespace DAL.Data.Migrations
                     BrandName = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
                     ImagePath = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
                     Count = table.Column<int>(type: "int", nullable: false),
-                    Price = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    TotalPrice = table.Column<decimal>(type: "decimal(18,2)", nullable: false)
+                    Price = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -109,14 +110,23 @@ namespace DAL.Data.Migrations
                 });
 
             migrationBuilder.InsertData(
-                table: "Coins",
-                columns: new[] { "Id", "Count", "Denomination" },
+                table: "Brands",
+                columns: new[] { "Id", "Name" },
                 values: new object[,]
                 {
-                    { 1, 0, 1 },
-                    { 2, 0, 2 },
-                    { 3, 0, 5 },
-                    { 4, 0, 10 }
+                    { 1, "brand1" },
+                    { 2, "brand2" }
+                });
+
+            migrationBuilder.InsertData(
+                table: "Coins",
+                columns: new[] { "Id", "Count", "Denomination", "ImagePath" },
+                values: new object[,]
+                {
+                    { 1, 0, 1, "/images/rub1.png" },
+                    { 2, 0, 2, "/images/rub2.png" },
+                    { 3, 0, 5, "/images/rub5.png" },
+                    { 4, 0, 10, "/images/rub10.png" }
                 });
 
             migrationBuilder.CreateIndex(
